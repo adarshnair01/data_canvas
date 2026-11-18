@@ -1,0 +1,2926 @@
+{
+  "about": "Shared fixtures run by both the Rust backend (src-tauri/src/db/crosscheck_tests.rs) and the web backend's TypeScript ports (src/lib/backend/web/crosscheck.test.ts). Inputs are hand-written; every `expect` is generated from Rust with `UPDATE_CROSSCHECK=1 cargo test crosscheck`.",
+  "expressions": [
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "name": "revenue",
+            "type": "column"
+          },
+          "op": "sub",
+          "right": {
+            "left": {
+              "name": "cost",
+              "type": "column"
+            },
+            "op": "mul",
+            "right": {
+              "type": "number",
+              "value": 2.0
+            },
+            "type": "binary"
+          },
+          "type": "binary"
+        },
+        "columns": [
+          "revenue",
+          "cost"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "(\"revenue\" - (\"cost\" * 2))"
+      },
+      "src": "revenue - cost * 2"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "left": {
+              "name": "revenue",
+              "type": "column"
+            },
+            "op": "sub",
+            "right": {
+              "name": "cost",
+              "type": "column"
+            },
+            "type": "binary"
+          },
+          "op": "mul",
+          "right": {
+            "type": "number",
+            "value": 2.0
+          },
+          "type": "binary"
+        },
+        "columns": [
+          "revenue",
+          "cost"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "((\"revenue\" - \"cost\") * 2)"
+      },
+      "src": "(revenue - cost) * 2"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "op": "neg",
+            "operand": {
+              "name": "revenue",
+              "type": "column"
+            },
+            "type": "unary"
+          },
+          "op": "add",
+          "right": {
+            "type": "number",
+            "value": 1.5
+          },
+          "type": "binary"
+        },
+        "columns": [
+          "revenue"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "((-\"revenue\") + 1.5)"
+      },
+      "src": "-revenue + 1.5"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "name": "revenue",
+            "type": "column"
+          },
+          "op": "div",
+          "right": {
+            "name": "qty",
+            "type": "column"
+          },
+          "type": "binary"
+        },
+        "columns": [
+          "revenue",
+          "qty"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "(\"revenue\" / NULLIF(\"qty\", 0))"
+      },
+      "src": "revenue / qty"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "name": "revenue",
+            "type": "column"
+          },
+          "op": "mod",
+          "right": {
+            "type": "number",
+            "value": 3.0
+          },
+          "type": "binary"
+        },
+        "columns": [
+          "revenue"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "(\"revenue\" % NULLIF(3, 0))"
+      },
+      "src": "revenue % 3"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "arg": {
+              "name": "revenue",
+              "type": "column"
+            },
+            "func": "sum",
+            "type": "aggregate"
+          },
+          "op": "div",
+          "right": {
+            "arg": null,
+            "func": "count",
+            "type": "aggregate"
+          },
+          "type": "binary"
+        },
+        "columns": [
+          "revenue"
+        ],
+        "isAggregate": true,
+        "params": [],
+        "sql": "(sum(\"revenue\") / NULLIF(count(*), 0))"
+      },
+      "src": "SUM(revenue) / COUNT(*)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "args": [
+            {
+              "left": {
+                "left": {
+                  "arg": {
+                    "left": {
+                      "name": "revenue",
+                      "type": "column"
+                    },
+                    "op": "sub",
+                    "right": {
+                      "name": "cost",
+                      "type": "column"
+                    },
+                    "type": "binary"
+                  },
+                  "func": "sum",
+                  "type": "aggregate"
+                },
+                "op": "div",
+                "right": {
+                  "arg": {
+                    "name": "revenue",
+                    "type": "column"
+                  },
+                  "func": "sum",
+                  "type": "aggregate"
+                },
+                "type": "binary"
+              },
+              "op": "mul",
+              "right": {
+                "type": "number",
+                "value": 100.0
+              },
+              "type": "binary"
+            },
+            {
+              "type": "number",
+              "value": 1.0
+            }
+          ],
+          "func": "round",
+          "type": "call"
+        },
+        "columns": [
+          "revenue",
+          "cost"
+        ],
+        "isAggregate": true,
+        "params": [],
+        "sql": "round(((sum((\"revenue\" - \"cost\")) / NULLIF(sum(\"revenue\"), 0)) * 100), 1)"
+      },
+      "src": "round(sum(revenue - cost) / sum(revenue) * 100, 1)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "arg": {
+            "name": "region",
+            "type": "column"
+          },
+          "func": "count_distinct",
+          "type": "aggregate"
+        },
+        "columns": [
+          "region"
+        ],
+        "isAggregate": true,
+        "params": [],
+        "sql": "count(DISTINCT \"region\")"
+      },
+      "src": "count_distinct(region)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "args": [
+            {
+              "name": "cost",
+              "type": "column"
+            }
+          ],
+          "func": "abs",
+          "type": "call"
+        },
+        "columns": [
+          "cost"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "abs(\"cost\")"
+      },
+      "src": "ABS(cost)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "args": [
+            {
+              "name": "cost",
+              "type": "column"
+            },
+            {
+              "type": "number",
+              "value": 0.0
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "func": "coalesce",
+          "type": "call"
+        },
+        "columns": [
+          "cost"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "coalesce(\"cost\", 0, NULL)"
+      },
+      "src": "coalesce(cost, 0, NULL)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "name": "revenue",
+            "type": "column"
+          },
+          "op": "mul",
+          "right": {
+            "name": "qty",
+            "type": "column"
+          },
+          "type": "binary"
+        },
+        "columns": [
+          "revenue",
+          "qty"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "(\"revenue\" * \"qty\")"
+      },
+      "src": "revenue * qty"
+    },
+    {
+      "expect": {
+        "ast": {
+          "args": [
+            {
+              "left": {
+                "name": "region",
+                "type": "column"
+              },
+              "op": "eq",
+              "right": {
+                "type": "string",
+                "value": "North"
+              },
+              "type": "binary"
+            },
+            {
+              "name": "revenue",
+              "type": "column"
+            },
+            {
+              "type": "number",
+              "value": 0.0
+            }
+          ],
+          "func": "if",
+          "type": "call"
+        },
+        "columns": [
+          "region",
+          "revenue"
+        ],
+        "isAggregate": false,
+        "params": [
+          {
+            "text": "North"
+          }
+        ],
+        "sql": "(CASE WHEN (\"region\" = ?) THEN \"revenue\" ELSE 0 END)"
+      },
+      "src": "IF(region = 'North', revenue, 0)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "args": [
+            {
+              "left": {
+                "left": {
+                  "left": {
+                    "name": "revenue",
+                    "type": "column"
+                  },
+                  "op": "gt",
+                  "right": {
+                    "type": "number",
+                    "value": 10.0
+                  },
+                  "type": "binary"
+                },
+                "op": "and",
+                "right": {
+                  "op": "not",
+                  "operand": {
+                    "left": {
+                      "name": "cost",
+                      "type": "column"
+                    },
+                    "op": "lte",
+                    "right": {
+                      "type": "number",
+                      "value": 5.0
+                    },
+                    "type": "binary"
+                  },
+                  "type": "unary"
+                },
+                "type": "binary"
+              },
+              "op": "or",
+              "right": {
+                "left": {
+                  "name": "qty",
+                  "type": "column"
+                },
+                "op": "neq",
+                "right": {
+                  "type": "number",
+                  "value": 1.0
+                },
+                "type": "binary"
+              },
+              "type": "binary"
+            },
+            {
+              "type": "number",
+              "value": 1.0
+            },
+            {
+              "type": "number",
+              "value": 0.0
+            }
+          ],
+          "func": "if",
+          "type": "call"
+        },
+        "columns": [
+          "revenue",
+          "cost",
+          "qty"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "(CASE WHEN (((\"revenue\" > 10) AND (NOT (\"cost\" <= 5))) OR (\"qty\" <> 1)) THEN 1 ELSE 0 END)"
+      },
+      "src": "IF(revenue > 10 AND NOT cost <= 5 OR qty <> 1, 1, 0)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "args": [
+            {
+              "left": {
+                "left": {
+                  "name": "region",
+                  "type": "column"
+                },
+                "op": "eq",
+                "right": {
+                  "type": "string",
+                  "value": "South"
+                },
+                "type": "binary"
+              },
+              "op": "or",
+              "right": {
+                "left": {
+                  "name": "flag",
+                  "type": "column"
+                },
+                "op": "eq",
+                "right": {
+                  "type": "boolean",
+                  "value": true
+                },
+                "type": "binary"
+              },
+              "type": "binary"
+            },
+            {
+              "type": "number",
+              "value": 1.0
+            },
+            {
+              "type": "boolean",
+              "value": false
+            }
+          ],
+          "func": "if",
+          "type": "call"
+        },
+        "columns": [
+          "region",
+          "flag"
+        ],
+        "isAggregate": false,
+        "params": [
+          {
+            "text": "South"
+          }
+        ],
+        "sql": "(CASE WHEN ((\"region\" = ?) OR (\"flag\" = TRUE)) THEN 1 ELSE FALSE END)"
+      },
+      "src": "IF(region == \"South\" or flag = TRUE, 1, FALSE)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "left": {
+              "left": {
+                "name": "qty",
+                "type": "column"
+              },
+              "op": "neq",
+              "right": {
+                "type": "number",
+                "value": 2.0
+              },
+              "type": "binary"
+            },
+            "op": "and",
+            "right": {
+              "left": {
+                "name": "qty",
+                "type": "column"
+              },
+              "op": "gte",
+              "right": {
+                "type": "number",
+                "value": 1.0
+              },
+              "type": "binary"
+            },
+            "type": "binary"
+          },
+          "op": "and",
+          "right": {
+            "left": {
+              "name": "qty",
+              "type": "column"
+            },
+            "op": "lt",
+            "right": {
+              "type": "number",
+              "value": 9.0
+            },
+            "type": "binary"
+          },
+          "type": "binary"
+        },
+        "columns": [
+          "qty"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "(((\"qty\" <> 2) AND (\"qty\" >= 1)) AND (\"qty\" < 9))"
+      },
+      "src": "qty != 2 AND qty >= 1 AND qty < 9"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "name": "Unit Price",
+            "type": "column"
+          },
+          "op": "mul",
+          "right": {
+            "name": "qty",
+            "type": "column"
+          },
+          "type": "binary"
+        },
+        "columns": [
+          "Unit Price",
+          "qty"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "(\"Unit Price\" * \"qty\")"
+      },
+      "src": "[Unit Price] * QTY"
+    },
+    {
+      "expect": {
+        "ast": {
+          "name": "Unit Price",
+          "type": "column"
+        },
+        "columns": [
+          "Unit Price"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "\"Unit Price\""
+      },
+      "src": "[ Unit Price ]"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "type": "number",
+            "value": 1000.0
+          },
+          "op": "add",
+          "right": {
+            "type": "number",
+            "value": 0.25
+          },
+          "type": "binary"
+        },
+        "columns": [],
+        "isAggregate": false,
+        "params": [],
+        "sql": "(1000 + 0.25)"
+      },
+      "src": "1e3 + 0.25"
+    },
+    {
+      "expect": {
+        "ast": {
+          "type": "number",
+          "value": 1e+300
+        },
+        "columns": [],
+        "isAggregate": false,
+        "params": [],
+        "sql": "1e300"
+      },
+      "src": "1e300"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "left": {
+              "left": {
+                "type": "number",
+                "value": 1e+16
+              },
+              "op": "add",
+              "right": {
+                "type": "number",
+                "value": 1.5e-7
+              },
+              "type": "binary"
+            },
+            "op": "add",
+            "right": {
+              "type": "number",
+              "value": 0.0001
+            },
+            "type": "binary"
+          },
+          "op": "add",
+          "right": {
+            "type": "number",
+            "value": 2500.0
+          },
+          "type": "binary"
+        },
+        "columns": [],
+        "isAggregate": false,
+        "params": [],
+        "sql": "(((1e16 + 1.5e-7) + 0.0001) + 2500)"
+      },
+      "src": "1e16 + 1.5e-7 + 0.0001 + 2.5E+3"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "type": "number",
+            "value": 1000000000000000.0
+          },
+          "op": "add",
+          "right": {
+            "type": "number",
+            "value": 123456789012345.0
+          },
+          "type": "binary"
+        },
+        "columns": [],
+        "isAggregate": false,
+        "params": [],
+        "sql": "(1000000000000000.0 + 123456789012345)"
+      },
+      "src": "1000000000000000 + 123456789012345"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "type": "number",
+            "value": 0.5
+          },
+          "op": "mul",
+          "right": {
+            "type": "number",
+            "value": 2.0
+          },
+          "type": "binary"
+        },
+        "columns": [],
+        "isAggregate": false,
+        "params": [],
+        "sql": "(0.5 * 2)"
+      },
+      "src": ".5 * 2."
+    },
+    {
+      "expect": {
+        "ast": {
+          "arg": {
+            "name": "ts",
+            "type": "column"
+          },
+          "func": "max",
+          "type": "aggregate"
+        },
+        "columns": [
+          "ts"
+        ],
+        "isAggregate": true,
+        "params": [],
+        "sql": "max(\"ts\")"
+      },
+      "src": "MAX(ts) "
+    },
+    {
+      "expect": {
+        "ast": {
+          "arg": {
+            "name": "order_date",
+            "type": "column"
+          },
+          "func": "min",
+          "type": "aggregate"
+        },
+        "columns": [
+          "order_date"
+        ],
+        "isAggregate": true,
+        "params": [],
+        "sql": "min(\"order_date\")"
+      },
+      "src": "min(order_date)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "args": [
+            {
+              "name": "revenue",
+              "type": "column"
+            }
+          ],
+          "func": "round",
+          "type": "call"
+        },
+        "columns": [
+          "revenue"
+        ],
+        "isAggregate": false,
+        "params": [],
+        "sql": "round(\"revenue\")"
+      },
+      "src": "ROUND(revenue)"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: usage: ROUND(value[, digits]) with an integer literal for digits",
+          "position": 0
+        }
+      },
+      "src": "ROUND(revenue, -2)"
+    },
+    {
+      "expect": {
+        "ast": {
+          "args": [
+            {
+              "left": {
+                "name": "region",
+                "type": "column"
+              },
+              "op": "eq",
+              "right": {
+                "type": "string",
+                "value": "x' OR 1=1 --"
+              },
+              "type": "binary"
+            },
+            {
+              "type": "number",
+              "value": 1.0
+            },
+            {
+              "type": "number",
+              "value": 0.0
+            }
+          ],
+          "func": "if",
+          "type": "call"
+        },
+        "columns": [
+          "region"
+        ],
+        "isAggregate": false,
+        "params": [
+          {
+            "text": "x' OR 1=1 --"
+          }
+        ],
+        "sql": "(CASE WHEN (\"region\" = ?) THEN 1 ELSE 0 END)"
+      },
+      "src": "IF(region = 'x'' OR 1=1 --', 1, 0)"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: expression is empty",
+          "position": 0
+        }
+      },
+      "src": ""
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: expression is empty",
+          "position": 0
+        }
+      },
+      "src": "   "
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unexpected end of expression",
+          "position": 9
+        }
+      },
+      "src": "revenue +"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unknown column 'unknown_col'",
+          "position": 0
+        }
+      },
+      "src": "unknown_col * 2"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: aggregates cannot be nested",
+          "position": 0
+        }
+      },
+      "src": "SUM(SUM(revenue))"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: columns outside an aggregate cannot be mixed with aggregates; wrap them in SUM/AVG/MIN/MAX/COUNT",
+          "position": 0
+        }
+      },
+      "src": "SUM(revenue) + cost"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: usage: IF(condition, then, else)",
+          "position": 0
+        }
+      },
+      "src": "IF(revenue > 1, 2)"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: usage: ROUND(value[, digits]) with an integer literal for digits",
+          "position": 0
+        }
+      },
+      "src": "ROUND(revenue, qty)"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: usage: ROUND(value[, digits]) with an integer literal for digits",
+          "position": 0
+        }
+      },
+      "src": "ROUND(revenue, 1.5)"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: usage: ROUND(value[, digits]) with an integer literal for digits",
+          "position": 0
+        }
+      },
+      "src": "ROUND(revenue, 16)"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: usage: ABS(value)",
+          "position": 0
+        }
+      },
+      "src": "ABS()"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: usage: COALESCE(value, ...)",
+          "position": 0
+        }
+      },
+      "src": "COALESCE()"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: SUM takes exactly one argument",
+          "position": 0
+        }
+      },
+      "src": "SUM(revenue, cost)"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: COUNT takes exactly one argument",
+          "position": 0
+        }
+      },
+      "src": "COUNT()"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unterminated string",
+          "position": 0
+        }
+      },
+      "src": "'abc"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unterminated column reference",
+          "position": 0
+        }
+      },
+      "src": "[revenue"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: empty column reference",
+          "position": 0
+        }
+      },
+      "src": "[  ]"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unexpected input after expression",
+          "position": 8
+        }
+      },
+      "src": "revenue revenue"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: invalid number '1.2.3'",
+          "position": 0
+        }
+      },
+      "src": "1.2.3"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: number out of range",
+          "position": 0
+        }
+      },
+      "src": "1e400"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unexpected character '!'",
+          "position": 8
+        }
+      },
+      "src": "revenue ! 2"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: expected ')'",
+          "position": 8
+        }
+      },
+      "src": "(revenue"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unexpected end of expression",
+          "position": 3
+        }
+      },
+      "src": "NOT"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unexpected end of expression",
+          "position": 11
+        }
+      },
+      "src": "revenue AND"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unexpected keyword 'OR'",
+          "position": 0
+        }
+      },
+      "src": "OR revenue"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unexpected character ';'",
+          "position": 7
+        }
+      },
+      "src": "revenue; DELETE FROM x"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unexpected character ';'",
+          "position": 8
+        }
+      },
+      "src": "revenue); DROP TABLE ds_x; --"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unknown function 'read_csv'. Allowed: IF, ROUND, ABS, COALESCE, SUM, AVG, MIN, MAX, COUNT, COUNT_DISTINCT",
+          "position": 0
+        }
+      },
+      "src": "read_csv('/etc/passwd')"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unknown function 'current_setting'. Allowed: IF, ROUND, ABS, COALESCE, SUM, AVG, MIN, MAX, COUNT, COUNT_DISTINCT",
+          "position": 0
+        }
+      },
+      "src": "current_setting('x')"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unknown column 'revenue\"; DROP TABLE x; --'",
+          "position": 0
+        }
+      },
+      "src": "[revenue\"; DROP TABLE x; --]"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unknown column 'comment'",
+          "position": 11
+        }
+      },
+      "src": "revenue -- comment"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unexpected token",
+          "position": 9
+        }
+      },
+      "src": "revenue /* c */"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unknown column 'SELECT'",
+          "position": 0
+        }
+      },
+      "src": "SELECT 1"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unknown column 'café'",
+          "position": 0
+        }
+      },
+      "src": "café * 2"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: columns outside an aggregate cannot be mixed with aggregates; wrap them in SUM/AVG/MIN/MAX/COUNT",
+          "position": 0
+        }
+      },
+      "src": "COUNT(*) + [Unit Price]"
+    },
+    {
+      "expect": {
+        "ast": {
+          "left": {
+            "left": {
+              "left": {
+                "left": {
+                  "left": {
+                    "left": {
+                      "left": {
+                        "left": {
+                          "left": {
+                            "left": {
+                              "left": {
+                                "left": {
+                                  "left": {
+                                    "left": {
+                                      "left": {
+                                        "left": {
+                                          "left": {
+                                            "left": {
+                                              "left": {
+                                                "left": {
+                                                  "left": {
+                                                    "left": {
+                                                      "left": {
+                                                        "left": {
+                                                          "left": {
+                                                            "left": {
+                                                              "left": {
+                                                                "left": {
+                                                                  "left": {
+                                                                    "left": {
+                                                                      "left": {
+                                                                        "left": {
+                                                                          "left": {
+                                                                            "left": {
+                                                                              "left": {
+                                                                                "left": {
+                                                                                  "left": {
+                                                                                    "left": {
+                                                                                      "left": {
+                                                                                        "type": "number",
+                                                                                        "value": 1.0
+                                                                                      },
+                                                                                      "op": "add",
+                                                                                      "right": {
+                                                                                        "type": "number",
+                                                                                        "value": 1.0
+                                                                                      },
+                                                                                      "type": "binary"
+                                                                                    },
+                                                                                    "op": "add",
+                                                                                    "right": {
+                                                                                      "type": "number",
+                                                                                      "value": 1.0
+                                                                                    },
+                                                                                    "type": "binary"
+                                                                                  },
+                                                                                  "op": "add",
+                                                                                  "right": {
+                                                                                    "type": "number",
+                                                                                    "value": 1.0
+                                                                                  },
+                                                                                  "type": "binary"
+                                                                                },
+                                                                                "op": "add",
+                                                                                "right": {
+                                                                                  "type": "number",
+                                                                                  "value": 1.0
+                                                                                },
+                                                                                "type": "binary"
+                                                                              },
+                                                                              "op": "add",
+                                                                              "right": {
+                                                                                "type": "number",
+                                                                                "value": 1.0
+                                                                              },
+                                                                              "type": "binary"
+                                                                            },
+                                                                            "op": "add",
+                                                                            "right": {
+                                                                              "type": "number",
+                                                                              "value": 1.0
+                                                                            },
+                                                                            "type": "binary"
+                                                                          },
+                                                                          "op": "add",
+                                                                          "right": {
+                                                                            "type": "number",
+                                                                            "value": 1.0
+                                                                          },
+                                                                          "type": "binary"
+                                                                        },
+                                                                        "op": "add",
+                                                                        "right": {
+                                                                          "type": "number",
+                                                                          "value": 1.0
+                                                                        },
+                                                                        "type": "binary"
+                                                                      },
+                                                                      "op": "add",
+                                                                      "right": {
+                                                                        "type": "number",
+                                                                        "value": 1.0
+                                                                      },
+                                                                      "type": "binary"
+                                                                    },
+                                                                    "op": "add",
+                                                                    "right": {
+                                                                      "type": "number",
+                                                                      "value": 1.0
+                                                                    },
+                                                                    "type": "binary"
+                                                                  },
+                                                                  "op": "add",
+                                                                  "right": {
+                                                                    "type": "number",
+                                                                    "value": 1.0
+                                                                  },
+                                                                  "type": "binary"
+                                                                },
+                                                                "op": "add",
+                                                                "right": {
+                                                                  "type": "number",
+                                                                  "value": 1.0
+                                                                },
+                                                                "type": "binary"
+                                                              },
+                                                              "op": "add",
+                                                              "right": {
+                                                                "type": "number",
+                                                                "value": 1.0
+                                                              },
+                                                              "type": "binary"
+                                                            },
+                                                            "op": "add",
+                                                            "right": {
+                                                              "type": "number",
+                                                              "value": 1.0
+                                                            },
+                                                            "type": "binary"
+                                                          },
+                                                          "op": "add",
+                                                          "right": {
+                                                            "type": "number",
+                                                            "value": 1.0
+                                                          },
+                                                          "type": "binary"
+                                                        },
+                                                        "op": "add",
+                                                        "right": {
+                                                          "type": "number",
+                                                          "value": 1.0
+                                                        },
+                                                        "type": "binary"
+                                                      },
+                                                      "op": "add",
+                                                      "right": {
+                                                        "type": "number",
+                                                        "value": 1.0
+                                                      },
+                                                      "type": "binary"
+                                                    },
+                                                    "op": "add",
+                                                    "right": {
+                                                      "type": "number",
+                                                      "value": 1.0
+                                                    },
+                                                    "type": "binary"
+                                                  },
+                                                  "op": "add",
+                                                  "right": {
+                                                    "type": "number",
+                                                    "value": 1.0
+                                                  },
+                                                  "type": "binary"
+                                                },
+                                                "op": "add",
+                                                "right": {
+                                                  "type": "number",
+                                                  "value": 1.0
+                                                },
+                                                "type": "binary"
+                                              },
+                                              "op": "add",
+                                              "right": {
+                                                "type": "number",
+                                                "value": 1.0
+                                              },
+                                              "type": "binary"
+                                            },
+                                            "op": "add",
+                                            "right": {
+                                              "type": "number",
+                                              "value": 1.0
+                                            },
+                                            "type": "binary"
+                                          },
+                                          "op": "add",
+                                          "right": {
+                                            "type": "number",
+                                            "value": 1.0
+                                          },
+                                          "type": "binary"
+                                        },
+                                        "op": "add",
+                                        "right": {
+                                          "type": "number",
+                                          "value": 1.0
+                                        },
+                                        "type": "binary"
+                                      },
+                                      "op": "add",
+                                      "right": {
+                                        "type": "number",
+                                        "value": 1.0
+                                      },
+                                      "type": "binary"
+                                    },
+                                    "op": "add",
+                                    "right": {
+                                      "type": "number",
+                                      "value": 1.0
+                                    },
+                                    "type": "binary"
+                                  },
+                                  "op": "add",
+                                  "right": {
+                                    "type": "number",
+                                    "value": 1.0
+                                  },
+                                  "type": "binary"
+                                },
+                                "op": "add",
+                                "right": {
+                                  "type": "number",
+                                  "value": 1.0
+                                },
+                                "type": "binary"
+                              },
+                              "op": "add",
+                              "right": {
+                                "type": "number",
+                                "value": 1.0
+                              },
+                              "type": "binary"
+                            },
+                            "op": "add",
+                            "right": {
+                              "type": "number",
+                              "value": 1.0
+                            },
+                            "type": "binary"
+                          },
+                          "op": "add",
+                          "right": {
+                            "type": "number",
+                            "value": 1.0
+                          },
+                          "type": "binary"
+                        },
+                        "op": "add",
+                        "right": {
+                          "type": "number",
+                          "value": 1.0
+                        },
+                        "type": "binary"
+                      },
+                      "op": "add",
+                      "right": {
+                        "type": "number",
+                        "value": 1.0
+                      },
+                      "type": "binary"
+                    },
+                    "op": "add",
+                    "right": {
+                      "type": "number",
+                      "value": 1.0
+                    },
+                    "type": "binary"
+                  },
+                  "op": "add",
+                  "right": {
+                    "type": "number",
+                    "value": 1.0
+                  },
+                  "type": "binary"
+                },
+                "op": "add",
+                "right": {
+                  "type": "number",
+                  "value": 1.0
+                },
+                "type": "binary"
+              },
+              "op": "add",
+              "right": {
+                "type": "number",
+                "value": 1.0
+              },
+              "type": "binary"
+            },
+            "op": "add",
+            "right": {
+              "type": "number",
+              "value": 1.0
+            },
+            "type": "binary"
+          },
+          "op": "add",
+          "right": {
+            "left": {
+              "type": "number",
+              "value": 1.0
+            },
+            "op": "mul",
+            "right": {
+              "type": "number",
+              "value": 2.0
+            },
+            "type": "binary"
+          },
+          "type": "binary"
+        },
+        "columns": [],
+        "isAggregate": false,
+        "params": [],
+        "sql": "(((((((((((((((((((((((((((((((((((((((1 + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1) + (1 * 2))"
+      },
+      "src": "1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1 * 2"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: expression is nested too deeply",
+          "position": 32
+        }
+      },
+      "src": "((((((((((((((((((((((((((((((((((revenue))))))))))))))))))))))))))))))))))"
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: too many arguments",
+          "position": 50
+        }
+      },
+      "src": "COALESCE(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17)"
+    }
+  ],
+  "fingerprints": [
+    {
+      "expect": {
+        "partialSha256": "840deb9bfb2f9ec191348d3c712bc8855f0c42e2bf6c71c85982daf80c34b980",
+        "size": 8
+      },
+      "name": "small",
+      "text": "a,b\n1,2\n"
+    },
+    {
+      "expect": {
+        "partialSha256": "df1bf8419e3c5334a864d029c033029c54ae92faf1eb9bfe88b94326ab6199e2",
+        "size": 8
+      },
+      "name": "small changed",
+      "text": "a,b\n1,3\n"
+    },
+    {
+      "expect": {
+        "partialSha256": "310e7d7555ae7bc862d56c7495f21de2c4b87624687e270175abad63d7301653",
+        "size": 35
+      },
+      "name": "unicode",
+      "text": "région,montant\nZürich,1\n東京,2\n"
+    },
+    {
+      "count": 1048576,
+      "expect": {
+        "partialSha256": "ea8741b60f1272a6d61e82226091e3a1b143c98c737c5ca9e80c8e768576edd2",
+        "size": 1048576
+      },
+      "name": "exactly one chunk",
+      "repeat": "x"
+    },
+    {
+      "count": 3145727,
+      "expect": {
+        "partialSha256": "354c124366fd5affc421b26b88e5d423eacda4510e3d233521287ce0ecaabdf4",
+        "size": 3145728
+      },
+      "name": "three chunks with tail",
+      "repeat": "x",
+      "tail": "y"
+    },
+    {
+      "count": 786432,
+      "expect": {
+        "partialSha256": "636565b955081139b854c748881d60ab696b13e6f544d2f6c54c707031db4871",
+        "size": 1572864
+      },
+      "name": "chunk and a half",
+      "repeat": "ab"
+    }
+  ],
+  "queries": [
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [],
+        "sql": "SELECT \"region\" AS \"d0\", sum(\"revenue\") AS \"m0\" FROM \"dsv_t1\" GROUP BY \"region\" ORDER BY \"d0\" ASC NULLS LAST LIMIT 5001 OFFSET 0"
+      },
+      "name": "bar sum by region",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d0"
+          }
+        ],
+        "measures": [
+          {
+            "agg": "sum",
+            "id": "m0",
+            "source": {
+              "column": "revenue",
+              "type": "column"
+            }
+          }
+        ],
+        "sort": [
+          {
+            "by": "d0",
+            "dir": "asc"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [],
+        "sql": "SELECT CAST(date_trunc('month', \"order_date\") AS DATE) AS \"d0\", avg(\"revenue\") AS \"m0\" FROM \"dsv_t1\" GROUP BY CAST(date_trunc('month', \"order_date\") AS DATE) ORDER BY \"d0\" ASC NULLS LAST LIMIT 5001 OFFSET 0"
+      },
+      "name": "line month bucket default order",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "bucket": "month",
+            "field": "order_date",
+            "id": "d0"
+          }
+        ],
+        "measures": [
+          {
+            "agg": "avg",
+            "id": "m0",
+            "source": {
+              "column": "revenue",
+              "type": "column"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [],
+        "sql": "SELECT CAST(date_trunc('week', \"ts\") AS DATE) AS \"d0\", count(*) AS \"n\" FROM \"dsv_t1\" GROUP BY CAST(date_trunc('week', \"ts\") AS DATE) ORDER BY \"d0\" ASC NULLS LAST LIMIT 5001 OFFSET 0"
+      },
+      "name": "timestamp week bucket",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "bucket": "week",
+            "field": "ts",
+            "id": "d0"
+          }
+        ],
+        "measures": [
+          {
+            "agg": "count",
+            "id": "n",
+            "source": {
+              "type": "rows"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [
+          {
+            "text": "North"
+          },
+          {
+            "text": "South"
+          }
+        ],
+        "sql": "SELECT \"region\" AS \"x\", \"product\" AS \"c\", count(*) AS \"y\" FROM \"dsv_t1\" WHERE (\"region\" IN (?, ?)) GROUP BY \"region\", \"product\" ORDER BY \"x\" ASC NULLS LAST, \"c\" DESC NULLS LAST LIMIT 5001 OFFSET 0"
+      },
+      "name": "stacked colour dimension",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "x"
+          },
+          {
+            "field": "product",
+            "id": "c"
+          }
+        ],
+        "filters": [
+          {
+            "field": "region",
+            "kind": "in",
+            "values": [
+              "North",
+              "South"
+            ]
+          }
+        ],
+        "measures": [
+          {
+            "agg": "count",
+            "id": "y",
+            "source": {
+              "type": "rows"
+            }
+          }
+        ],
+        "sort": [
+          {
+            "by": "x",
+            "dir": "asc"
+          },
+          {
+            "by": "c",
+            "dir": "desc"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [],
+        "sql": "SELECT \"product\" AS \"d0\", count(DISTINCT \"region\") AS \"m0\" FROM \"dsv_t1\" GROUP BY \"product\" ORDER BY \"m0\" DESC NULLS LAST LIMIT 5001 OFFSET 0"
+      },
+      "name": "pie count distinct",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "product",
+            "id": "d0"
+          }
+        ],
+        "measures": [
+          {
+            "agg": "count_distinct",
+            "id": "m0",
+            "source": {
+              "column": "region",
+              "type": "column"
+            }
+          }
+        ],
+        "sort": [
+          {
+            "by": "m0",
+            "dir": "desc"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [],
+        "sql": "SELECT \"region\" AS \"color\", \"qty\" AS \"x\", \"revenue\" AS \"y\", (\"revenue\" / NULLIF(\"qty\", 0)) AS \"size\" FROM \"dsv_t1\" LIMIT 5001 OFFSET 0"
+      },
+      "name": "scatter raw with expression",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "color"
+          }
+        ],
+        "measures": [
+          {
+            "agg": "none",
+            "id": "x",
+            "source": {
+              "column": "qty",
+              "type": "column"
+            }
+          },
+          {
+            "agg": "none",
+            "id": "y",
+            "source": {
+              "column": "revenue",
+              "type": "column"
+            }
+          },
+          {
+            "agg": "none",
+            "id": "size",
+            "source": {
+              "expression": "revenue / qty",
+              "type": "expression"
+            }
+          }
+        ],
+        "mode": "raw"
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [],
+        "sql": "SELECT sum(\"revenue\") AS \"total\", round(((sum((\"revenue\" - \"cost\")) / NULLIF(sum(\"revenue\"), 0)) * 100), 1) AS \"margin\", min(\"order_date\") AS \"mn\", max(\"ts\") AS \"mx\" FROM \"dsv_t1\" LIMIT 5001 OFFSET 0"
+      },
+      "name": "kpi aggregate expression",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "sum",
+            "id": "total",
+            "source": {
+              "column": "revenue",
+              "type": "column"
+            }
+          },
+          {
+            "agg": "none",
+            "id": "margin",
+            "source": {
+              "expression": "ROUND(SUM(revenue - cost) / SUM(revenue) * 100, 1)",
+              "type": "expression"
+            }
+          },
+          {
+            "agg": "min",
+            "id": "mn",
+            "source": {
+              "column": "order_date",
+              "type": "column"
+            }
+          },
+          {
+            "agg": "max",
+            "id": "mx",
+            "source": {
+              "column": "ts",
+              "type": "column"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "limit": 2,
+        "params": [],
+        "sql": "SELECT \"product\" AS \"a\", \"we\"\"ird col\" AS \"b\", \"revenue\" AS \"c\" FROM \"dsv_t1\" ORDER BY \"c\" DESC NULLS LAST LIMIT 3 OFFSET 1"
+      },
+      "name": "table raw paging",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "product",
+            "id": "a"
+          },
+          {
+            "field": "we\"ird col",
+            "id": "b"
+          }
+        ],
+        "limit": 2,
+        "measures": [
+          {
+            "agg": "none",
+            "id": "c",
+            "source": {
+              "column": "revenue",
+              "type": "column"
+            }
+          }
+        ],
+        "mode": "raw",
+        "offset": 1,
+        "sort": [
+          {
+            "by": "c",
+            "dir": "desc"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [
+          {
+            "text": "North"
+          }
+        ],
+        "sql": "SELECT \"product\" AS \"a\", sum((CASE WHEN (\"region\" = ?) THEN (\"revenue\" * \"qty\") ELSE 0 END)) AS \"c\" FROM \"dsv_t1\" GROUP BY \"product\" LIMIT 5001 OFFSET 0"
+      },
+      "name": "row expression with agg and string param",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "product",
+            "id": "a"
+          }
+        ],
+        "measures": [
+          {
+            "agg": "sum",
+            "id": "c",
+            "source": {
+              "expression": "IF(region = 'North', revenue * qty, 0)",
+              "type": "expression"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [
+          {
+            "float": 20.0
+          },
+          {
+            "float": 100.5
+          },
+          {
+            "text": "2024-01-10"
+          },
+          {
+            "text": "2024-03-05"
+          },
+          {
+            "text": "a"
+          },
+          {
+            "text": "South"
+          }
+        ],
+        "sql": "SELECT count(*) AS \"n\" FROM \"dsv_t1\" WHERE (\"revenue\" >= ? AND \"revenue\" <= ?) AND (\"order_date\" >= CAST(? AS DATE) AND \"order_date\" < CAST(? AS DATE) + INTERVAL 1 DAY) AND contains(lower(CAST(\"product\" AS VARCHAR)), lower(?)) AND (\"region\" IN (?) OR \"region\" IS NULL) LIMIT 5001 OFFSET 0"
+      },
+      "name": "all filter kinds",
+      "spec": {
+        "datasetId": "t1",
+        "filters": [
+          {
+            "field": "revenue",
+            "kind": "range",
+            "max": 100.5,
+            "min": 20
+          },
+          {
+            "field": "order_date",
+            "from": "2024-01-10",
+            "kind": "dateRange",
+            "to": "2024-3-5"
+          },
+          {
+            "field": "product",
+            "kind": "contains",
+            "text": "a"
+          },
+          {
+            "field": "region",
+            "kind": "in",
+            "values": [
+              "South",
+              null
+            ]
+          },
+          {
+            "field": "qty",
+            "kind": "in",
+            "values": []
+          },
+          {
+            "field": "qty",
+            "kind": "range"
+          },
+          {
+            "field": "product",
+            "kind": "contains",
+            "text": ""
+          }
+        ],
+        "measures": [
+          {
+            "agg": "count",
+            "id": "n",
+            "source": {
+              "type": "rows"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [
+          {
+            "int": 1
+          },
+          {
+            "int": 2
+          },
+          {
+            "float": 2.5
+          },
+          {
+            "int": 7
+          },
+          {
+            "bool": true
+          },
+          {
+            "bool": false
+          },
+          {
+            "text": "2024-01-05"
+          },
+          {
+            "text": "5"
+          },
+          {
+            "text": "3"
+          },
+          {
+            "text": "true"
+          }
+        ],
+        "sql": "SELECT count(*) AS \"n\" FROM \"dsv_t1\" WHERE (\"qty\" IN (?, ?, ?, ?)) AND (\"flag\" IN (?, ?)) AND (CAST(\"order_date\" AS VARCHAR) IN (?, ?)) AND (\"region\" IN (?, ?)) LIMIT 5001 OFFSET 0"
+      },
+      "name": "in filters on typed columns",
+      "spec": {
+        "datasetId": "t1",
+        "filters": [
+          {
+            "field": "qty",
+            "kind": "in",
+            "values": [
+              1,
+              "2",
+              2.5,
+              " 7 "
+            ]
+          },
+          {
+            "field": "flag",
+            "kind": "in",
+            "values": [
+              true,
+              "false"
+            ]
+          },
+          {
+            "field": "order_date",
+            "kind": "in",
+            "values": [
+              "2024-01-05",
+              5
+            ]
+          },
+          {
+            "field": "region",
+            "kind": "in",
+            "values": [
+              3,
+              true
+            ]
+          }
+        ],
+        "measures": [
+          {
+            "agg": "count",
+            "id": "n",
+            "source": {
+              "type": "rows"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [
+          {
+            "text": "North"
+          },
+          {
+            "text": "A"
+          }
+        ],
+        "sql": "SELECT count(*) AS \"n\" FROM \"dsv_t1\" WHERE (NOT (\"region\" IN (?)) OR \"region\" IS NULL) AND (NOT (\"product\" IN (?) OR \"product\" IS NULL)) LIMIT 5001 OFFSET 0"
+      },
+      "name": "exclude filters and nulls",
+      "spec": {
+        "datasetId": "t1",
+        "filters": [
+          {
+            "exclude": true,
+            "field": "region",
+            "kind": "in",
+            "values": [
+              "North"
+            ]
+          },
+          {
+            "exclude": true,
+            "field": "product",
+            "kind": "in",
+            "values": [
+              "A",
+              null
+            ]
+          }
+        ],
+        "measures": [
+          {
+            "agg": "count",
+            "id": "n",
+            "source": {
+              "type": "rows"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [],
+        "sql": "SELECT \"qty\" AS \"i\" FROM \"dsv_t1\" LIMIT 5001 OFFSET 0"
+      },
+      "name": "limit clamps to cap",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "qty",
+            "id": "i"
+          }
+        ],
+        "limit": 999999,
+        "mode": "raw"
+      }
+    },
+    {
+      "expect": {
+        "limit": 1,
+        "params": [],
+        "sql": "SELECT \"qty\" AS \"i\" FROM \"dsv_t1\" GROUP BY \"qty\" LIMIT 2 OFFSET 100000000"
+      },
+      "name": "limit zero clamps to one",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "qty",
+            "id": "i"
+          }
+        ],
+        "limit": 0,
+        "offset": 200000000
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [
+          {
+            "text": "North' OR '1'='1'; DROP TABLE ds_t1; --"
+          },
+          {
+            "text": "'); DROP TABLE ds_t1; --"
+          }
+        ],
+        "sql": "SELECT count(*) AS \"n\" FROM \"dsv_t1\" WHERE (\"region\" IN (?)) AND contains(lower(CAST(\"product\" AS VARCHAR)), lower(?)) LIMIT 5001 OFFSET 0"
+      },
+      "name": "hostile values are bound",
+      "spec": {
+        "datasetId": "t1",
+        "filters": [
+          {
+            "field": "region",
+            "kind": "in",
+            "values": [
+              "North' OR '1'='1'; DROP TABLE ds_t1; --"
+            ]
+          },
+          {
+            "field": "product",
+            "kind": "contains",
+            "text": "'); DROP TABLE ds_t1; --"
+          }
+        ],
+        "measures": [
+          {
+            "agg": "count",
+            "id": "n",
+            "source": {
+              "type": "rows"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "limit": 5000,
+        "params": [],
+        "sql": "SELECT \"we\"\"ird col\" AS \"w\", count(*) AS \"n\" FROM \"dsv_t1\" GROUP BY \"we\"\"ird col\" ORDER BY \"w\" ASC NULLS LAST LIMIT 5001 OFFSET 0"
+      },
+      "name": "weird column grouped",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "we\"ird col",
+            "id": "w"
+          }
+        ],
+        "measures": [
+          {
+            "agg": "count",
+            "id": "n",
+            "source": {
+              "type": "rows"
+            }
+          }
+        ],
+        "sort": [
+          {
+            "by": "w",
+            "dir": "asc"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: select at least one field"
+        }
+      },
+      "name": "err no fields",
+      "spec": {
+        "datasetId": "t1"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: date bucketing requires a date column, 'region' is String"
+        }
+      },
+      "name": "err bucket on string",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "bucket": "month",
+            "field": "region",
+            "id": "d"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: cannot Sum non-numeric column 'region'"
+        }
+      },
+      "name": "err sum of string",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "sum",
+            "id": "m",
+            "source": {
+              "column": "region",
+              "type": "column"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: cannot Avg non-numeric column 'product'"
+        }
+      },
+      "name": "err avg of string",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "avg",
+            "id": "m",
+            "source": {
+              "column": "product",
+              "type": "column"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: measure 'revenue' needs an aggregation"
+        }
+      },
+      "name": "err measure without agg",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "none",
+            "id": "m",
+            "source": {
+              "column": "revenue",
+              "type": "column"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: expression already aggregates; set aggregation to none"
+        }
+      },
+      "name": "err aggregate expression with agg",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "sum",
+            "id": "m",
+            "source": {
+              "expression": "SUM(revenue)",
+              "type": "expression"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: row-level expression needs an aggregation"
+        }
+      },
+      "name": "err row expression without agg",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "none",
+            "id": "m",
+            "source": {
+              "expression": "revenue",
+              "type": "expression"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: aggregate expressions are not allowed in raw mode"
+        }
+      },
+      "name": "err aggregate expression in raw",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "none",
+            "id": "m",
+            "source": {
+              "expression": "SUM(revenue)",
+              "type": "expression"
+            }
+          }
+        ],
+        "mode": "raw"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: aggregations are not allowed in raw mode"
+        }
+      },
+      "name": "err raw expression with agg",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "sum",
+            "id": "m",
+            "source": {
+              "expression": "revenue",
+              "type": "expression"
+            }
+          }
+        ],
+        "mode": "raw"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: aggregations are not allowed in raw mode"
+        }
+      },
+      "name": "err raw column with agg",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "sum",
+            "id": "m",
+            "source": {
+              "column": "qty",
+              "type": "column"
+            }
+          }
+        ],
+        "mode": "raw"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: row count measures require aggregate mode"
+        }
+      },
+      "name": "err raw row count",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "count",
+            "id": "m",
+            "source": {
+              "type": "rows"
+            }
+          }
+        ],
+        "mode": "raw"
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: duplicate id 'd'"
+        }
+      },
+      "name": "err duplicate id",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          },
+          {
+            "field": "product",
+            "id": "d"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: sort references unknown id 'zzz'"
+        }
+      },
+      "name": "err sort unknown id",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          }
+        ],
+        "sort": [
+          {
+            "by": "zzz",
+            "dir": "asc"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: numeric range filter on non-numeric column 'region'"
+        }
+      },
+      "name": "err range on string",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          }
+        ],
+        "filters": [
+          {
+            "field": "region",
+            "kind": "range",
+            "min": 1
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: date range filter on non-date column 'revenue'"
+        }
+      },
+      "name": "err date range on number",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          }
+        ],
+        "filters": [
+          {
+            "field": "revenue",
+            "from": "2024-01-01",
+            "kind": "dateRange"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: invalid date 'yesterday', expected YYYY-MM-DD"
+        }
+      },
+      "name": "err bad date",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          }
+        ],
+        "filters": [
+          {
+            "field": "order_date",
+            "from": "yesterday",
+            "kind": "dateRange"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: invalid date '2024-02-30', expected YYYY-MM-DD"
+        }
+      },
+      "name": "err impossible date",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          }
+        ],
+        "filters": [
+          {
+            "field": "order_date",
+            "kind": "dateRange",
+            "to": "2024-02-30"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: invalid filter value \"abc\" for column 'qty'"
+        }
+      },
+      "name": "err non numeric in value",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          }
+        ],
+        "filters": [
+          {
+            "field": "qty",
+            "kind": "in",
+            "values": [
+              "abc"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: invalid filter value \"yes\" for column 'flag'"
+        }
+      },
+      "name": "err bad boolean value",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          }
+        ],
+        "filters": [
+          {
+            "field": "flag",
+            "kind": "in",
+            "values": [
+              "yes"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: invalid filter value {\"a\":1} for column 'region'"
+        }
+      },
+      "name": "err object filter value",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          }
+        ],
+        "filters": [
+          {
+            "field": "region",
+            "kind": "in",
+            "values": [
+              {
+                "a": 1
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "unknownColumn",
+          "message": "Unknown column: region\"; DROP TABLE ds_t1; --"
+        }
+      },
+      "name": "err unknown column injection",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region\"; DROP TABLE ds_t1; --",
+            "id": "d"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "unknownColumn",
+          "message": "Unknown column: *"
+        }
+      },
+      "name": "err star column",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "count",
+            "id": "m",
+            "source": {
+              "column": "*",
+              "type": "column"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: invalid alias 'd\" FROM ds_t1; DROP TABLE ds_t1; --'"
+        }
+      },
+      "name": "err crafted alias",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d\" FROM ds_t1; DROP TABLE ds_t1; --"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidQuery",
+          "message": "Invalid query: sort references unknown id 'd\"; DROP TABLE ds_t1; --'"
+        }
+      },
+      "name": "err crafted sort",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          }
+        ],
+        "sort": [
+          {
+            "by": "d\"; DROP TABLE ds_t1; --",
+            "dir": "asc"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "unknownDataset",
+          "message": "Unknown dataset: t1\"; DROP TABLE ds_t1; --"
+        }
+      },
+      "name": "err crafted dataset id",
+      "spec": {
+        "datasetId": "t1\"; DROP TABLE ds_t1; --",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "unknownDataset",
+          "message": "Unknown dataset: ../t1"
+        }
+      },
+      "name": "err path dataset id",
+      "spec": {
+        "datasetId": "../t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unexpected character ';'",
+          "position": 13
+        }
+      },
+      "name": "err expression smuggling",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "none",
+            "id": "m",
+            "source": {
+              "expression": "SUM(revenue)); DROP TABLE ds_t1; --",
+              "type": "expression"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "invalidExpression",
+          "message": "Invalid expression: unknown function 'read_csv_auto'. Allowed: IF, ROUND, ABS, COALESCE, SUM, AVG, MIN, MAX, COUNT, COUNT_DISTINCT",
+          "position": 0
+        }
+      },
+      "name": "err expression function",
+      "spec": {
+        "datasetId": "t1",
+        "measures": [
+          {
+            "agg": "none",
+            "id": "m",
+            "source": {
+              "expression": "read_csv_auto('/etc/passwd')",
+              "type": "expression"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "expect": {
+        "error": {
+          "kind": "unknownColumn",
+          "message": "Unknown column: region) OR 1=1 --"
+        }
+      },
+      "name": "err contains crafted field",
+      "spec": {
+        "datasetId": "t1",
+        "dimensions": [
+          {
+            "field": "region",
+            "id": "d"
+          }
+        ],
+        "filters": [
+          {
+            "field": "region) OR 1=1 --",
+            "kind": "contains",
+            "text": "x"
+          }
+        ]
+      }
+    }
+  ],
+  "schema": [
+    {
+      "logicalType": "string",
+      "name": "region"
+    },
+    {
+      "logicalType": "string",
+      "name": "product"
+    },
+    {
+      "logicalType": "date",
+      "name": "order_date"
+    },
+    {
+      "logicalType": "timestamp",
+      "name": "ts"
+    },
+    {
+      "logicalType": "float",
+      "name": "revenue"
+    },
+    {
+      "logicalType": "float",
+      "name": "cost"
+    },
+    {
+      "logicalType": "integer",
+      "name": "qty"
+    },
+    {
+      "logicalType": "boolean",
+      "name": "flag"
+    },
+    {
+      "logicalType": "float",
+      "name": "Unit Price"
+    },
+    {
+      "logicalType": "string",
+      "name": "we\"ird col"
+    }
+  ]
+}
